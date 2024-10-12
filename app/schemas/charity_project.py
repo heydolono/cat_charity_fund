@@ -12,7 +12,6 @@ class CharityProjectBase(BaseModel):
     class Config:
         extra = Extra.forbid
 
-    
     @validator("full_amount")
     def validate_full_amount(cls, value):
         if value < 0:
@@ -42,7 +41,6 @@ class CharityProjectDB(CharityProjectBase):
 
     class Config:
         orm_mode = True
-
 
     @validator("invested_amount")
     def validate_invested_amount(cls, value):

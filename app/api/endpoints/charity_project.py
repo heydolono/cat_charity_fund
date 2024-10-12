@@ -26,7 +26,9 @@ async def create_new_charityproject(
 ):
     """Только для суперюзеров."""
     await check_project_unique(charity_project.name, session)
-    new_charity_project = await charityproject_crud.create(charity_project, session)
+    new_charity_project = await charityproject_crud.create(
+        charity_project, session
+    )
     await invest_funds(session)
     return new_charity_project
 
@@ -80,5 +82,7 @@ async def remove_charity_project(
     """Только для суперюзеров."""
     charity_project = await check_project_exists(project_id, session)
     await check_delete_project(project_id, session)
-    charity_project = await charityproject_crud.remove(charity_project, session)
+    charity_project = await charityproject_crud.remove(
+        charity_project, session
+    )
     return charity_project

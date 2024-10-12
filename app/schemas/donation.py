@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, Extra, Field, conint
+from pydantic import BaseModel, Extra, conint
 
 
 class DonationBase(BaseModel):
@@ -26,6 +26,7 @@ class DonationList(DonationBase):
 
     class Config:
         orm_mode = True
+
 
 class DonationDB(DonationBase):
     id: int

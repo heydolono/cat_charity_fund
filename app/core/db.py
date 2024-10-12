@@ -28,7 +28,7 @@ class CommonFieldsMixin:
     @declared_attr
     def close_date(cls):
         return Column(DateTime)
-   
+
 
 Base = declarative_base(cls=PreBase)
 

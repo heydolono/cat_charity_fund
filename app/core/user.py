@@ -46,7 +46,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
             raise InvalidPasswordException(
                 reason='Password should not contain e-mail'
             )
-        
+
     async def on_after_register(
             self, user: User, request: Optional[Request] = None
     ):
@@ -60,7 +60,7 @@ async def get_user_manager(user_db=Depends(get_user_db)):
 fastapi_users = FastAPIUsers[User, int](
     get_user_manager,
     [auth_backend],
-) 
+)
 
 current_user = fastapi_users.current_user(active=True)
 current_superuser = fastapi_users.current_user(active=True, superuser=True)

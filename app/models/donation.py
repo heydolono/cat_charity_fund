@@ -1,5 +1,6 @@
-from sqlalchemy import Column, ForeignKey, Text, Integer
+from sqlalchemy import Column, ForeignKey, Integer, Text
 from sqlalchemy.orm import relationship
+
 from app.core.db import Base, CommonFieldsMixin
 
 

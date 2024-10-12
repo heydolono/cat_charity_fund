@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, Boolean, DateTime
+from datetime import datetime
+
+from sqlalchemy import Boolean, Column, DateTime, Integer
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import declarative_base, declared_attr, sessionmaker
-from datetime import datetime
 
 from app.core.config import settings
 
@@ -26,7 +27,7 @@ class CommonFieldsMixin:
 
     @declared_attr
     def close_date(cls):
-        return Column(DateTime, nullable=True)
+        return Column(DateTime)
    
 
 Base = declarative_base(cls=PreBase)

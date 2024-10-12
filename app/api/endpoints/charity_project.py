@@ -1,13 +1,15 @@
 from fastapi import APIRouter, Depends
-
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.validators import (check_delete_project, check_project_exists,
+                                check_project_unique, check_update_project)
 from app.core.db import get_async_session
-from app.crud.charityproject import charityproject_crud
-from app.schemas.charityproject import (
-    CharityProjectCreate, CharityProjectDB, CharityProjectUpdate
-)
 from app.core.user import current_superuser
+from app.crud.charity_project import charityproject_crud
+from app.schemas.charity_project import (CharityProjectCreate,
+                                         CharityProjectDB,
+                                         CharityProjectUpdate)
+from app.services.investment import invest_funds
 
 router = APIRouter()
 
@@ -23,7 +25,9 @@ async def create_new_charityproject(
         session: AsyncSession = Depends(get_async_session),
 ):
     """Только для суперюзеров."""
+    await check_project_unique(charity_project.name, session)
     new_charity_project = await charityproject_crud.create(charity_project, session)
+    await invest_funds(session)
     return new_charity_project
 
 
@@ -51,8 +55,14 @@ async def partially_update_charity_project(
         session: AsyncSession = Depends(get_async_session),
 ):
     """Только для суперюзеров."""
+    charity_project = await check_project_exists(project_id, session)
+    if obj_in.name is not None:
+        await check_project_unique(obj_in.name, session)
+    await check_update_project(
+        project_id, obj_in.full_amount, session
+    )
     charity_project = await charityproject_crud.update(
-        project_id, obj_in, session
+        charity_project, obj_in, session
     )
     return charity_project
 
@@ -68,5 +78,7 @@ async def remove_charity_project(
         session: AsyncSession = Depends(get_async_session),
 ):
     """Только для суперюзеров."""
+    charity_project = await check_project_exists(project_id, session)
+    await check_delete_project(project_id, session)
     charity_project = await charityproject_crud.remove(charity_project, session)
     return charity_project
